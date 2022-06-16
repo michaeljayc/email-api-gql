@@ -6,5 +6,5 @@ export class MessageId {
 
     @Field({nullable: true})
     @IsUUID()
-    id!: string;
+    id?: string;
 }

@@ -108,58 +108,61 @@ export class MessageResolver {
 
             try {
                 let response: any;
-                let query: MessageInput = messageInput;
+                let query: MessageInput;
+                let existing_message: Message;
                 // get logged_in user data
                 const current_user = await this
                     .jwtService
                     .verifyAsync(ctx.req.cookies["jwt"])
 
                 // check if message is new or existing
-                const existing_message = await this
-                    .messageService
-                    .getMessage(messageId);
+                if (Object.keys(messageId).length) {
+                    existing_message = await this
+                        .messageService
+                        .getMessage(messageId);
 
-                if (!existing_message)
-                    throw new BadRequestException("Message does not exist.")
+                    if (!existing_message)
+                        throw new BadRequestException("Message does not exist.")
 
-                // message to insert
-                if (existing_message) {
+                    // query for existing message
                     query = ({
                         ...existing_message,
-                        subject: existing_message.subject ??
-                                 messageInput.subject,
-                        message: existing_message.message ??
-                                 messageInput.message, 
+                        subject: messageInput.subject ||
+                                    existing_message.subject, 
+                        message: messageInput.message ||
+                                    existing_message.message, 
                         sender: {
                             ...existing_message.sender,
                             menu: "sent"
                         },
                         recipient : {
-                            email: existing_message.recipient?.email ?? 
-                                   messageInput.recipient?.email,
+                            email: messageInput.recipient?.email ||
+                                    existing_message.recipient?.email,
                             menu: "inbox"
                         },
                         status: "",
                         updated_date: setDateTime()
-                    })
-                } else {
-                    query = ({
-                        recipient : {
-                            ...messageInput.recipient,
-                            menu: "inbox"
-                        },
-                        sender: {
-                            email: current_user.email,
-                            menu: "sent"
-                        }
-                    })
-                }
-                //response = await this.messageService.sendMessage(query,messageId);
-                // return formatMessageResponse("Message sent successfully.",
-                //     await this.paginationService.pagination([response]),
-                //     true
-                // )
-                console.log(query)
+                    }) 
+                } 
+
+                // query for new message
+                query = ({
+                    ...messageInput,
+                    recipient : {
+                        ...messageInput.recipient,
+                        menu: "inbox"
+                    },
+                    sender: {
+                        email: current_user.email,
+                        menu: "sent"
+                    }
+                })
+
+                response = await this.messageService.sendMessage(query,messageId);
+                return formatMessageResponse("Message sent successfully.",
+                    await this.paginationService.pagination([response]),
+                    true
+                )
             } catch (error) {
                 Logger.error(error)
             }
@@ -233,12 +236,14 @@ export class MessageResolver {
                         menu: "draft"
                     },
                     recipient: {
-                        ...messageInput.recipient,
-                        email: messageInput.recipient?.email ?? ""
+                    ...(messageInput.recipient ? messageInput.recipient :{
+                        email: "",
+                        menu: ""
+                    })
                     },
                     status: "draft"
                 })
-
+    
                 const data = await this.messageService.sendMessage(query);
 
                 return formatMessageResponse("Message saved as draft",
@@ -278,10 +283,10 @@ export class MessageResolver {
                                  updateMessageInput.subject,
                         message: existing_message.message ??
                                  updateMessageInput.message,
-                        recipent: {
+                        recipient: {
                             ...existing_message.recipient,
-                            email: existing_message.recipient?.email ??
-                                   updateMessageInput.recipient?.email,
+                            email: existing_message.recipient?.email ||
+                                   updateMessageInput.recipient?.email
                         },
                         updated_date: setDateTime()
                     })
@@ -289,7 +294,6 @@ export class MessageResolver {
                     const data = await this
                         .messageService
                         .updateDraftMessage(messageId, query);
-                    console.log(data)
                     return await formatMessageResponse("Message successfully updated.",
                         await this.paginationService.pagination([data]),
                         true
