@@ -1,0 +1,188 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUser {
+  birthdate: String!
+  created_date: String = "6/16/2022 - 1:46:17 PM"
+  email: String!
+  first_name: String!
+  gender: String!
+  last_name: String!
+  password: String!
+  role: UserRoleCreateInput
+  updated_date: String = "6/16/2022 - 1:46:17 PM"
+  username: String!
+}
+
+type Message {
+  created_date: String!
+  id: String!
+  message: String
+  message_origin_id: String
+  recipient: MessageReference
+  sender: MessageReference
+  status: String!
+  subject: String
+  updated_date: String!
+}
+
+input MessageId {
+  id: String
+}
+
+input MessageInput {
+  created_date: String = "6/16/2022 - 1:46:17 PM"
+  message: String
+  message_origin_id: String = ""
+  recipient: MessageRecipientInput
+  sender: MessageSenderInput
+  status: String = ""
+  subject: String
+  updated_date: String = "6/16/2022 - 1:46:17 PM"
+}
+
+type MessagePaginationResponse {
+  current_page: Int!
+  next_page: Int!
+  page_lists: [Message!]
+  per_page: Int!
+  previous_page: Int!
+  total_pages: Int!
+  total_results: Int!
+}
+
+input MessageRecipientInput {
+  email: String
+  menu: String = ""
+}
+
+type MessageReference {
+  email: String
+  menu: String
+}
+
+type MessageResponseFormat {
+  datas: MessagePaginationResponse
+  message: String!
+  success: Boolean!
+}
+
+input MessageSenderInput {
+  email: String
+  menu: String = ""
+}
+
+type Mutation {
+  DeleteMessage(messageId: MessageId!): MessageResponseFormat!
+  ReplyMessage(messageId: MessageId!, messageInput: MessageInput!): MessageResponseFormat!
+  SaveAsDraft(messageInput: MessageInput!): MessageResponseFormat!
+  SendMessage(messageId: MessageId!, messageInput: MessageInput!): MessageResponseFormat!
+  UpdateDraftMessage(messageId: MessageId!, updateMessageInput: UpdateMessageInput!): MessageResponseFormat!
+  createUser(newUser: CreateUser!, newUserRole: UserRoleCreateInput!): UserResponseFormat!
+  deleteUser(userIdInput: UserIdInput!): UserResponseFormat!
+  updateUser(updateUser: UpdateUser!, userIdInput: UserIdInput!): UserResponseFormat!
+}
+
+type Query {
+  Login(userLoginInput: UserLoginInput!): UserResponseFormat!
+  Logout: UserResponseFormat!
+  Message(messageId: MessageId!): MessageResponseFormat!
+  Messages(page: Float!): MessageResponseFormat!
+  User(userIdInput: UserIdInput!): UserResponseFormat!
+  Users(page: Float!, param: UserSearch!): UserResponseFormat!
+  getAllRoles: [Role!]!
+  getRole(id: String!): Role!
+}
+
+type Role {
+  id: String!
+  role_name: String!
+  role_type: Int!
+}
+
+input UpdateMessageInput {
+  message: String
+  message_origin_id: String = ""
+  recipient: MessageRecipientInput
+  status: String = "draft"
+  subject: String
+  updated_date: String = "6/16/2022 - 1:46:17 PM"
+}
+
+input UpdateUser {
+  birthdate: String
+  email: String
+  first_name: String
+  gender: String
+  last_name: String
+  password: String
+  role: UserRoleCreateInput
+  updated_date: String = "6/16/2022 - 1:46:17 PM"
+  username: String
+}
+
+type User {
+  birthdate: String!
+  created_date: String!
+  email: String!
+  first_name: String!
+  gender: String!
+  id: String!
+  last_name: String!
+  password: String
+  role: Role!
+  updated_date: String!
+  username: String!
+}
+
+input UserIdInput {
+  id: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type UserPaginationResponse {
+  current_page: Int
+  next_page: Int!
+  page_lists: [User!]
+  per_page: Int!
+  previous_page: Int!
+  total_pages: Int!
+  total_results: Int!
+}
+
+type UserResponseFormat {
+  datas: UserPaginationResponse
+  message: String!
+  success: Boolean!
+}
+
+input UserRoleCreateInput {
+  id: String!
+  role_name: String!
+  role_type: Int!
+}
+
+input UserRoleSearchInput {
+  id: String
+  role_name: String
+  role_type: Int
+}
+
+input UserSearch {
+  birthdate: String
+  created_date: String
+  email: String
+  first_name: String
+  gender: String
+  id: String
+  last_name: String
+  password: String
+  role: UserRoleSearchInput
+  updated_date: String
+  username: String
+}

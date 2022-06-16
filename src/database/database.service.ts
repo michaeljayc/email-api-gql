@@ -18,7 +18,7 @@ export class DatabaseService {
   async createDatabase(database: string) {
     try {
       const dbLists = await this.listDatabase();
-      if (dbLists.includes('emailAPI')) return;
+      if (dbLists.includes('emailAPIGQL')) return;
       return this.r.dbCreate(database);
     } catch (error) {
       logger.log(error);
@@ -45,6 +45,7 @@ export class DatabaseService {
   }
 
   async getByFilter(database: string, table: string, params: any) {
+    console.log
     return this.r.db(database).table(table).filter(params);
   }
 
