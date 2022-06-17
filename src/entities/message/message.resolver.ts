@@ -1,6 +1,6 @@
 import { Resolver, Query, Args, Mutation, Context } from "@nestjs/graphql";
 import { MessageResponseFormat } from "./message.pagination";
-import { formatMessageResponse, RECIPIENT_MENU } from "./message.common";
+import { formatMessageResponse, RECIPIENT_MENU, SENDER_MENU } from "./message.common";
 import { MessageInput } from "src/dto/message/message-input";
 import { MessageId } from "src/dto/message/message-id";
 import { Message } from "./message.dto";
@@ -12,6 +12,7 @@ import { BadRequestException, Logger, UseGuards } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { AuthGuard } from "src/guards/auth.guard.ts/auth-guard.guard";
 import { setDateTime } from "src/common/common.functions";
+import { MenuFilteredMessages } from "src/dto/message/message-search";
 
 @Resolver(of => Message)
 export class MessageResolver {
@@ -39,7 +40,7 @@ export class MessageResolver {
                 if (!data) 
                     throw new BadRequestException("ID does not exist.");
 
-                // if ID exists and menu is in RECIPIENT_MENU or status is not read
+                // if ID exists and menu is in RECIPIENT_MENU or status is not read,
                 // mark as read
                 const updated_data = data;
                 const recipient_menu = updated_data.recipient?.menu ?? "";
@@ -67,29 +68,36 @@ export class MessageResolver {
     @UseGuards(AuthGuard)
     @Query(() => MessageResponseFormat, {name: "Messages"})
         async getAllMessages(@Context() ctx: Ctx,
-        @Args('page') page: number)
+        @Args('menu_filtered_messages') menu_filtered_messages: MenuFilteredMessages)
         : Promise<MessageResponseFormat | any> {
 
             try {
+                let query: any;
+                const page_number = menu_filtered_messages.page;
                 // get logged_in user data
                 const current_user = await this
                     .jwtService
                     .verifyAsync(ctx.req.cookies["jwt"])
 
-                // set page number
-                const page_number = page === 0 || !page ? 1 : page;
-                
-                const query = ({
-                    recipient: {
-                        email: current_user.email,
-                        menu: "inbox"
+                if (SENDER_MENU.includes(menu_filtered_messages.menu ?? ""))
+                    query = {
+                        sender: {
+                            email: current_user.email,
+                            menu: menu_filtered_messages.menu
+                        }
                     }
-                });   
+                else 
+                    query = {
+                        recipient: {
+                            email: current_user.email,
+                            menu: menu_filtered_messages.menu
+                        }
+                    }
 
                 const data = await this
                     .messageService
                     .getAllMessages(query);
-                
+
                 return await formatMessageResponse(`${data.length} record/s found`,
                     await this.paginationService.pagination(data,page_number),
                     true

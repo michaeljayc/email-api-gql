@@ -4,15 +4,20 @@
 
 input CreateUser {
   birthdate: String!
-  created_date: String = "6/16/2022 - 3:02:20 PM"
+  created_date: String = "6/17/2022 - 11:13:22 AM"
   email: String!
   first_name: String!
   gender: String!
   last_name: String!
   password: String!
   role: UserRoleCreateInput
-  updated_date: String = "6/16/2022 - 3:02:20 PM"
+  updated_date: String = "6/17/2022 - 11:13:22 AM"
   username: String!
+}
+
+input MenuFilteredMessages {
+  menu: String = "inbox"
+  page: Int = 1
 }
 
 type Message {
@@ -32,14 +37,14 @@ input MessageId {
 }
 
 input MessageInput {
-  created_date: String = "6/16/2022 - 3:02:20 PM"
+  created_date: String = "6/17/2022 - 11:13:22 AM"
   message: String
   message_origin_id: String = ""
   recipient: MessageRecipientInput
   sender: MessageSenderInput
   status: String = ""
   subject: String
-  updated_date: String = "6/16/2022 - 3:02:20 PM"
+  updated_date: String = "6/17/2022 - 11:13:22 AM"
 }
 
 type MessagePaginationResponse {
@@ -88,7 +93,7 @@ type Query {
   Login(userLoginInput: UserLoginInput!): UserResponseFormat!
   Logout: UserResponseFormat!
   Message(messageId: MessageId!): MessageResponseFormat!
-  Messages(page: Float!): MessageResponseFormat!
+  Messages(menu_filtered_messages: MenuFilteredMessages!): MessageResponseFormat!
   User(userIdInput: UserIdInput!): UserResponseFormat!
   Users(page: Float!, param: UserSearch!): UserResponseFormat!
   getAllRoles: [Role!]!
@@ -107,7 +112,7 @@ input UpdateMessageInput {
   recipient: MessageRecipientInput
   status: String = "draft"
   subject: String
-  updated_date: String = "6/16/2022 - 3:02:20 PM"
+  updated_date: String = "6/17/2022 - 11:13:22 AM"
 }
 
 input UpdateUser {
@@ -118,7 +123,7 @@ input UpdateUser {
   last_name: String
   password: String
   role: UserRoleCreateInput
-  updated_date: String = "6/16/2022 - 3:02:20 PM"
+  updated_date: String = "6/17/2022 - 11:13:22 AM"
   username: String
 }
 

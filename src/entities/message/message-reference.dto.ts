@@ -16,16 +16,26 @@ export class MessageReference {
 }
 
 @InputType()
+export class MessageReferenceInput {
+
+    @Field({nullable:true})
+    @IsEmail()
+    email?: string;  
+
+    @Field({nullable:true})
+    @IsString()
+    menu?: string;
+}
+
+@InputType()
 export class MessageSenderInput {
     
     @Field({nullable:true})
     @IsEmail()
-    @IsNotEmpty()
     email?: string;  
 
     @Field({defaultValue: "", nullable:true})
     @IsString()
-    @IsNotEmpty()
     menu?: string;
 }
 
@@ -34,11 +44,9 @@ export class MessageRecipientInput {
     
     @Field({ nullable:true})
     @IsEmail()
-    @IsNotEmpty()
     email?: string;  
 
     @Field({defaultValue: "", nullable:true})
     @IsString()
-    @IsNotEmpty()
     menu?: string;
 }

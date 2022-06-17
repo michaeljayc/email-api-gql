@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "src/database/database.service";
 import { MessageId } from "src/dto/message/message-id";
-import { MessageSearchInput } from "src/dto/message/message-search";
 import { MessageInput } from "src/dto/message/message-input";
 import { UpdateMessageInput } from "src/dto/message/message-update";
 import { Message } from "./message.dto";
+import { MessageReferenceInput } from "./message-reference.dto";
 
 const {DB="", TABLE="messages"} = process.env;
 
@@ -17,10 +17,10 @@ export class MessageService {
         return this.databaseService.getById(DB, TABLE, messageId.id ?? "");
     }
 
-    async getAllMessages(messageSearchInput: MessageSearchInput): Promise<Message[]> {
+    async getAllMessages(query: MessageReferenceInput): Promise<Message[]> {
         const data = await this
             .databaseService
-            .getByFilter(DB, TABLE, messageSearchInput)
+            .getByFilter(DB, TABLE, query)
         return data;
     }
 
