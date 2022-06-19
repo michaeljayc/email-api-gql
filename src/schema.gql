@@ -4,14 +4,14 @@
 
 input CreateUser {
   birthdate: String!
-  created_date: String = "6/17/2022 - 11:13:22 AM"
+  created_date: String = "6/20/2022 - 7:31:00 AM"
   email: String!
   first_name: String!
   gender: String!
   last_name: String!
   password: String!
   role: UserRoleCreateInput
-  updated_date: String = "6/17/2022 - 11:13:22 AM"
+  updated_date: String = "6/20/2022 - 7:31:00 AM"
   username: String!
 }
 
@@ -37,14 +37,14 @@ input MessageId {
 }
 
 input MessageInput {
-  created_date: String = "6/17/2022 - 11:13:22 AM"
+  created_date: String = "6/20/2022 - 7:31:00 AM"
   message: String
   message_origin_id: String = ""
   recipient: MessageRecipientInput
   sender: MessageSenderInput
   status: String = ""
   subject: String
-  updated_date: String = "6/17/2022 - 11:13:22 AM"
+  updated_date: String = "6/20/2022 - 7:31:00 AM"
 }
 
 type MessagePaginationResponse {
@@ -112,7 +112,7 @@ input UpdateMessageInput {
   recipient: MessageRecipientInput
   status: String = "draft"
   subject: String
-  updated_date: String = "6/17/2022 - 11:13:22 AM"
+  updated_date: String = "6/20/2022 - 7:31:00 AM"
 }
 
 input UpdateUser {
@@ -123,7 +123,7 @@ input UpdateUser {
   last_name: String
   password: String
   role: UserRoleCreateInput
-  updated_date: String = "6/17/2022 - 11:13:22 AM"
+  updated_date: String = "6/20/2022 - 7:31:00 AM"
   username: String
 }
 
