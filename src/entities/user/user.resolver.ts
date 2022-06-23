@@ -8,7 +8,7 @@ import { CreateUser } from "src/dto/user/user-create";
 import { UserRoleCreateInput } from "src/dto/user/user-role-input";
 import { UserResponseFormat, formatUserResponse  } from "./user.pagination"
 import { PaginationService } from "src/common/pagination/pagination.service";
-import { BadRequestException, Body, Logger, Req, UseGuards, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Body, Logger, UseGuards } from "@nestjs/common";
 import { AuthService } from "src/auth/auth.service";
 import { AuthGuard } from "src/guards/auth.guard.ts/auth-guard.guard";
 import Ctx from "src/interfaces/context.interface";
